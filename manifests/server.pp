@@ -1,6 +1,7 @@
-class couch {
-  exec { 'apt-get update':
-    command => '/usr/bin/apt-get update'
+class couchdb {
+
+  exec { 'install puppet user':
+    command => '/bin/echo "id -u puppet &>/dev/null || useradd puppet" | /bin/sh'
   }
 
   package { "couchdb":
@@ -9,8 +10,9 @@ class couch {
 
   service { "couchdb":
     ensure => running,
+    enable => true,
     require => Package["couchdb"],
   }
 }
 
-include couch 
+include couchdb 
