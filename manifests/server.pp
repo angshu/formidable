@@ -1,12 +1,38 @@
-class couch {
+class couchdb {
   package { "couchdb":
     ensure => present,
   }
 
   service { "couchdb":
-    ensure => running,
     require => Package["couchdb"],
+    ensure => running,
   }
 }
 
-include couch 
+class pip {
+  package { "python-dev":
+    ensure => installed,
+  }
+
+  package { "python-pip":
+    ensure => installed,
+  }
+}
+
+class couchapp-tool {
+  exec { "install-couchapp-tool":
+    command => "/usr/bin/pip install couchapp",
+  }
+}
+
+class couchapp {
+  exec { "install-couchapp":
+    cwd => "/vagrant/couchapp",
+    command => "/usr/local/bin/couchapp push formidable",
+  }
+}
+
+include couchdb 
+include pip
+include couchapp-tool
+include couchapp
