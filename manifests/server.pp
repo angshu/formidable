@@ -3,9 +3,18 @@ class couchdb {
     ensure => present,
   }
 
+  file { "local.ini" :
+      path => "/etc/couchdb/local.ini",
+      ensure => file,
+      content => "[httpd]
+port = 5984
+bind_address = 0.0.0.0",
+  }
+
   service { "couchdb":
     require => Package["couchdb"],
     ensure => running,
+    subscribe => File["local.ini"],
   }
 }
 
@@ -34,5 +43,5 @@ class couchapp {
 
 include couchdb 
 include pip
-include couchapp-tool
-include couchapp
+#include couchapp-tool
+#include couchapp
