@@ -7,7 +7,8 @@ Vagrant::Config.run do |config|
   config.vm.forward_port 5984, 5984 
 
   config.vm.provision :puppet do |puppet|
-    puppet.manifests_path = "manifests"
-    puppet.manifest_file  = "server.pp"
+    puppet.manifests_path = "puppet"
+    puppet.manifest_file = "server.pp"
+    puppet.module_path = "puppet/modules"
   end
 end
