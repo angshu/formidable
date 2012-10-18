@@ -6,9 +6,17 @@ class couchdb {
   file { "local.ini" :
       path => "/etc/couchdb/local.ini",
       ensure => file,
-      content => "[httpd]
+      owner => couchdb,
+      group => couchdb,
+      mode => 664,
+      content => "
+[httpd]
 port = 5984
-bind_address = 0.0.0.0",
+bind_address = 0.0.0.0
+WWW-Authenticate = Basic
+
+[admins]
+admin = password",
   }
 
   service { "couchdb":
