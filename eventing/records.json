@@ -1,8 +1,34 @@
 { "_id"      : "_design/records",
   "language" : "javascript",
-  "views"    : { "current_state" :
-                 { "map"    : "function(event) {                                                               \n  emit(event.recordId, event);\n}",
-                   "reduce" : "function(keys, records) {                                                       \n  var timeline = records.sort(function(eventA, eventB) {\n    return eventA.epoch - eventB.epoch;\n  });\n\n  var merge = function(under, over) {\n    if(under == null) return over;\n    if(over == null) return under;\n\n    for (var field in over) {\n      under[field] = over[field];\n    }\n\n    return under;\n  }\n\n  return timeline.reduce(function(earlier, later) {\n    later.data = merge(earlier.data, later.data);\n    return later;\n  });\n}"
-                  }
-                }
+  "views"    : { "current_state" : {
+
+"map":
+"function(event) {
+  emit(event.recordId, event);
+}",
+
+"reduce":
+"function(keys, records) {
+  var timeline = records.sort(function(eventA, eventB){
+    return eventA.epoch - eventB.epoch;});
+
+  var merge = function(under, over) {
+    if(under == null) return over;
+    if(over == null) return under;
+
+    for (var field in over) {
+      under[field] = over[field];
+    }
+
+    return under;
+  }
+
+  return timeline.reduce(function(earlier, later) {
+    later.data = merge(earlier.data, later.data);
+    return later;
+  });
+}"
+
+                                   }
+               }
 }
