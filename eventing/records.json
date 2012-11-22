@@ -16,7 +16,7 @@
 
     if(over == null) return under;
 
-    var hitBottom = (under == null || typeof(under) == 'string' || typeof(over) == 'string');
+    var hitBottom = (under == null || typeof(under) != 'object' || typeof(over) != 'object');
     if(hitBottom) return over;  
 
     for (var field in over) {
