@@ -1,0 +1,8 @@
+{ "_id"      : "_design/records",
+  "language" : "javascript",
+  "views"    : { "current_state" :
+                 { "map"    : "function(event) {                                                               \n  emit(event.recordId, event);\n}",
+                   "reduce" : "function(keys, records) {                                                       \n  var timeline = records.sort(function(eventA, eventB) {\n    return eventA.epoch - eventB.epoch;\n  });\n\n  var merge = function(under, over) {\n    if(under == null) return over;\n    if(over == null) return under;\n\n    for (var field in over) {\n      under[field] = over[field];\n    }\n\n    return under;\n  }\n\n  return timeline.reduce(function(earlier, later) {\n    later.data = merge(earlier.data, later.data);\n    return later;\n  });\n}"
+                  }
+                }
+}

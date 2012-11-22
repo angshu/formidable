@@ -18,15 +18,4 @@ class couchdb {
     ensure => running,
     subscribe => File["local.ini"],
   }
-
-  package { "curl":
-    ensure => present,
-  }
-
-  exec { "create-events-db":
-    require => [Service["couchdb"],
-                Package["curl"]],
-    command => "/usr/bin/curl -X PUT http://admin:password@localhost:5984/events",
-    refreshonly => true,
-  }
 }
