@@ -13,11 +13,14 @@
     return eventA.epoch - eventB.epoch;});
 
   var merge = function(under, over) {
-    if(under == null) return over;
+
     if(over == null) return under;
 
+    var hitBottom = (under == null || typeof(under) == 'string' || typeof(over) == 'string');
+    if(hitBottom) return over;  
+
     for (var field in over) {
-      under[field] = over[field];
+      under[field] = merge(under[field], over[field]);
     }
 
     return under;
